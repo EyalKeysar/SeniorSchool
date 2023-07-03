@@ -1,8 +1,0 @@
-Pre Knowledge (Realated to this task):
- -  Already built some Web projects including html javascript and css, 
-    used firebase framework and realtime database and hosting featchers.
-
-1. encounter first problem: Finding Codecademy html course.
-2. https://www.codecademy.com/learn/learn-html (It's not in task documents...)
-3. new things i learned: ordered/unordered lists, <br>, controls attribute
-4. 
