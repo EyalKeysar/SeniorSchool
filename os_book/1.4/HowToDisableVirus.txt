@@ -1,0 +1,6 @@
+First step is to open the Autoruns tool and to see 2 files that are suspicious, bootstat & WinSafe.
+Second step is to open each of them file location (path)
+Third step is to kill these processes with the Process Manager
+Fourth step is to delete the files from their file location.
+Last step is to delete them with the Autoruns tool.
+Restart the computer.

@@ -13,13 +13,13 @@ exit_all = False
 def handl_client(sock , tid, db):
     global exit_all
     
-    print "New Client num " + str(tid)
+    print("New Client num " + str(tid))
     
     while not exit_all:
         try:
             data = recv_by_size(sock)
             if data == "":
-                print "Error: Seens Client DC"
+                print("Error: Seens Client DC")
                 break
 
 
@@ -53,7 +53,7 @@ def do_action(data ,db):
     fields = data.split('|')
 
     if DEBUG:
-        print "Got client request " + action + " -- " + str(fields) 
+        print("Got client request " + action + " -- " + str(fields))
 
     if action == "UPDUSR":
         usr = SQL_ORM.User(fields[0], fields[1], fields[2], fields[3], fields[4], \
@@ -73,7 +73,7 @@ def do_action(data ,db):
         to_send = "RULIVER|"+ "yes i am a live server"
 
     else:
-        print "Got unknown action from client " +action
+        print("Got unknown action from client " + action)
         to_send = "ERR___R|001|"+ "unknown action"
 
     return to_send
@@ -116,7 +116,7 @@ def main ():
     s.bind(("0.0.0.0", 33445))
 
     s.listen(4)
-    print "after listen"
+    print("after listen")
 
     threads = []
     i = 1

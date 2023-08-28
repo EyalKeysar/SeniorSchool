@@ -109,7 +109,6 @@ class UserAccountORM():
         self.close_DB()
         return balance
 
-
     #__________________________________________________________________________________________________________________
     #__________________________________________________________________________________________________________________
     #______end of read start write ____________________________________________________________________________________
@@ -117,11 +116,7 @@ class UserAccountORM():
     #__________________________________________________________________________________________________________________
     #__________________________________________________________________________________________________________________
 
-
-
-
     #All write SQL
-
 
     def withdraw_by_username(self,amount,username):
         """
@@ -129,17 +124,12 @@ class UserAccountORM():
         """
         pass
         
-
     def deposit_by_username(self,amount,username):
-         pass
-
-
-
+        pass
 
     def insert_new_user(self,username,password,firstname,lastname,address,phone,email,acid):
-         pass
+        pass
 
-    
     #def insert_new_account(self,username,password,firstname,lastname,address,phone,email):
     def insert_new_account(self,user):
         self.open_DB()
@@ -162,16 +152,11 @@ class UserAccountORM():
     def update_user(self,user):
         self.open_DB()
 
-
-
         self.close_DB()
         return True
 
-
     def update_account(self,account):
         pass
-
-
 
     def delete_user(self,username):
         pass
@@ -192,5 +177,3 @@ def main_test():
 
 if __name__ == "__main__":
     main_test()
-
-

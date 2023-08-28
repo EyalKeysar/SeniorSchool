@@ -19,7 +19,8 @@ def handl_client(sock , tid, db):
     
     while not exit_all:
         try:
-            data = recv_by_size(sock)
+            data = recv_by_size(sock).decode()
+            print("data from client:" + data)
             if data == "":
                 print("Error: Seems Client DC")
                 break
@@ -56,8 +57,15 @@ def do_action(data , db):
         print("Got client request " + action + " -- " + str(fields))
 
 
-    elif action == "BBBBBB":
-        to_send = "BBBBBBR|"+ "b"
+    elif action == "ADDAUT":
+        if(len(fields) != 3):
+            to_send = "ERR___R|001|" + " not enogh fields"
+            return to_send
+        res = db.insert_new_author(SQL_ORM.Author(fields[0],fields[1],fields[2]))
+        if res != True:
+            to_send = "ERR___R|002|" + " insert new author failed"
+            return to_send
+        to_send = "ADDAUTOK"
 
     elif action == "CCCCCC":
         to_send = "CCCCCCR|"+ "c"
@@ -95,7 +103,7 @@ def main():
     
     exit_all = False
 
-    db= SQL_ORM.BookAuthorORM()
+    db= SQL_ORM.BookAuthorORM() # Bros just called it ORM
     
     s = socket.socket()
     

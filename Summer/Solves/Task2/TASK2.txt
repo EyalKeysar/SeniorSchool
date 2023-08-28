@@ -1,0 +1,3 @@
+# SQL Home Task/Test:
+
+insert Customers (11111, 'Ben', 'Levi', 'Beitar', 1, 11, 111.00, False);
