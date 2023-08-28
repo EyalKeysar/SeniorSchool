@@ -17,7 +17,7 @@ class Author(object):
         self.nationality = nationality
 
     def __str__(self):
-        return "Author :" + str(self.author_id) + ":" + self.first_name + ":" + self.last_name + ":" + self.nationality
+        return "Author:id:" + str(self.author_id) + ":first name:" + self.first_name + ":last name:" + self.last_name + ":nationality:" + self.nationality
     
 class Book(object):
     def __init__(self, book_name, genre, price, author_id):
@@ -56,11 +56,8 @@ class BookAuthorORM():
         self.close_DB()
 
     def _drop_tables(self):
-        self.open_DB()
-        self.current.execute("DROP TABLE IF EXISTS Authors;")
-        self.current.execute("DROP TABLE IF EXISTS Books;")
-        self.commit()
-        self.close_DB()
+        self._drop_only_books()
+        self._drop_only_authors()
     def _drop_only_books(self):
         self.open_DB()
         self.current.execute("DROP TABLE IF EXISTS Books;")
@@ -96,6 +93,13 @@ class BookAuthorORM():
             authors.append(cur_author)
         self.close_DB()
         return authors
+    
+    def get_authors_as_strings(self):
+        authors_as_obj = self.get_authors()
+        authors_as_str = []
+        for author in authors_as_obj:
+            authors_as_str.append(str(author))
+        return authors_as_str
     
     def get_books(self):
         self.open_DB()
@@ -153,6 +157,8 @@ class BookAuthorORM():
         self.commit()
         self.close_DB()
 
+        return True
+
     def insert_new_author(self, author):
 
         Fname = author.first_name
@@ -176,6 +182,8 @@ class BookAuthorORM():
 
         self.commit()
         self.close_DB()
+
+        return True
 
 
 def main_test():

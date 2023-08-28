@@ -24,10 +24,8 @@ def handl_client(sock , tid, db):
             if data == "":
                 print("Error: Seems Client DC")
                 break
-
             to_send = do_action(data ,db)
-
-            send_with_size(sock,to_send)
+            send_with_size(sock,str(to_send))
 
         except socket.error as  err:
             if err.errno == 10054:
@@ -39,7 +37,7 @@ def handl_client(sock , tid, db):
                 break
 
         except Exception as err:
-            print("General Error:", err.message)
+            print("General Error:", str(err))
             break
     sock.close()
 
@@ -51,24 +49,45 @@ def do_action(data , db):
     to_send = "Not Set Yet"
     action = data[:6]
     data = data[7:]
+    print("doing action on:" + action + " data:" + data)
     fields = data.split('|')
 
     if DEBUG:
         print("Got client request " + action + " -- " + str(fields))
 
 
-    elif action == "ADDAUT":
+    if action == "ADDAUT":
         if(len(fields) != 3):
             to_send = "ERR___R|001|" + " not enogh fields"
             return to_send
-        res = db.insert_new_author(SQL_ORM.Author(fields[0],fields[1],fields[2]))
+        
+        new_author = SQL_ORM.Author(fields[0],fields[1],fields[2])
+        res = db.insert_new_author(new_author)
+        print("insert new author :" + str(new_author))
+        
         if res != True:
             to_send = "ERR___R|002|" + " insert new author failed"
             return to_send
         to_send = "ADDAUTOK"
 
-    elif action == "CCCCCC":
-        to_send = "CCCCCCR|"+ "c"
+    elif action == "GETAUT":
+        to_send = db.get_authors_as_strings()
+
+    elif action == "GETBOK":
+        to_send = db.get_books()
+
+    elif action == "ADDBOK":
+        if(len(fields) != 4):
+            to_send = "ERR___R|001|" + " not enogh fields"
+            return to_send
+        new_book = SQL_ORM.Book(fields[0],fields[1],fields[2],fields[3])
+        res = db.insert_new_book(new_book)
+        print("insert new book :" + str(new_book))
+
+        if res != True:
+            to_send = "ERR___R|002|" + " insert new book failed"
+            return to_send
+        to_send = "ADDBOKOK"
 
     elif action == "RULIVE":
         to_send = "RULIVER|"+ "yes i am a live server"
@@ -103,7 +122,9 @@ def main():
     
     exit_all = False
 
-    db= SQL_ORM.BookAuthorORM() # Bros just called it ORM
+    db = SQL_ORM.BookAuthorORM() # Bros just called it ORM
+    db._drop_tables()
+    db._create_tables()
     
     s = socket.socket()
     
