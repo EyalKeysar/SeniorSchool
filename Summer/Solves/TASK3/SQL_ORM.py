@@ -58,6 +58,7 @@ class BookAuthorORM():
     def _drop_tables(self):
         self._drop_only_books()
         self._drop_only_authors()
+        
     def _drop_only_books(self):
         self.open_DB()
         self.current.execute("DROP TABLE IF EXISTS Books;")
@@ -73,6 +74,7 @@ class BookAuthorORM():
         self.conn = sqlite3.connect('./BookAuthor.db')
         self.current = self.conn.cursor()
         self.current.execute("PRAGMA foreign_keys = ON;") # Enforce foreign key constraints
+
     def close_DB(self):
         self.conn.close()
     def commit(self):
@@ -115,8 +117,84 @@ class BookAuthorORM():
         self.close_DB()
         return books
 
-    def get_book_authors_nationality(self,book_name):
-        pass
+    def get_book_by_author_id(self, author_id):
+        self.open_DB()
+        books = []
+        sql = "SELECT * FROM Books WHERE Authorid = " + str(author_id)
+        self.current.execute(sql)
+        res = self.current.fetchall()
+        for line in res:
+            cur_book = Book(line[1],line[2],line[3], line[4])
+            cur_book.book_id = line[0]
+            books.append(cur_book)
+        self.close_DB()
+        return books
+    
+    def get_book_by_author_name(self, author_fname, author_lname):
+        self.open_DB()
+        books = []
+        sql = "SELECT * FROM Books WHERE Authorid IN (SELECT Authorid FROM Authors WHERE Fname = '" + author_fname + "' AND Lname = '" + author_lname + "')"
+        self.current.execute(sql)
+        res = self.current.fetchall()
+        for line in res:
+            cur_book = Book(line[1],line[2],line[3], line[4])
+            cur_book.book_id = line[0]
+            books.append(cur_book)
+        self.close_DB()
+        return books
+    
+    def get_book_by_genre(self, genre):
+        self.open_DB()
+        books = []
+        sql = "SELECT * FROM Books WHERE Genre = '" + genre + "'"
+        self.current.execute(sql)
+        res = self.current.fetchall()
+        for line in res:
+            cur_book = Book(line[1],line[2],line[3], line[4])
+            cur_book.book_id = line[0]
+            books.append(cur_book)
+        self.close_DB()
+        return books
+    
+    def get_book_by_price(self, min_price, max_price):
+        self.open_DB()
+        books = []
+        sql = "SELECT * FROM Books WHERE Price >= " + min_price + " AND Price <= " + max_price
+        self.current.execute(sql)
+        res = self.current.fetchall()
+        for line in res:
+            cur_book = Book(line[1],line[2],line[3], line[4])
+            cur_book.book_id = line[0]
+            books.append(cur_book)
+        self.close_DB()
+        return books
+    
+    def get_book_by_name(self, book_name):
+        self.open_DB()
+        books = []
+        sql = "SELECT * FROM Books WHERE Bookname = '" + book_name + "'"
+        self.current.execute(sql)
+        res = self.current.fetchall()
+        for line in res:
+            cur_book = Book(line[1],line[2],line[3], line[4])
+            cur_book.book_id = line[0]
+            books.append(cur_book)
+        self.close_DB()
+        return books
+    
+    def get_authors_by_nationality(self, nationality):
+        self.open_DB()
+        authors = []
+        sql = "SELECT * FROM Authors WHERE Nationality = '" + nationality + "'"
+        self.current.execute(sql)
+        res = self.current.fetchall()
+        for line in res:
+            cur_author = Author(line[1],line[2],line[3])
+            cur_author.author_id = line[0]
+            authors.append(cur_author)
+        self.close_DB()
+        return authors
+    
 
 
     #__________________________________________________________________________________________________________________

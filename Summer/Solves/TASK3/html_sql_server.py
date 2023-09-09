@@ -74,7 +74,7 @@ def do_action(data , db):
         to_send = db.get_authors_as_strings()
 
     elif action == "GETBOK":
-        to_send = db.get_books()
+        to_send = str(db.get_books())
 
     elif action == "ADDBOK":
         if(len(fields) != 4):
@@ -88,6 +88,42 @@ def do_action(data , db):
             to_send = "ERR___R|002|" + " insert new book failed"
             return to_send
         to_send = "ADDBOKOK"
+
+    elif action == "GBBAID":
+        if(len(fields) != 1):
+            to_send = "ERR___R|001|" + " not enogh fields"
+            return to_send
+        to_send = db.get_book_by_author_id(fields[0])
+    
+    elif action == "GBBYAN":
+        if(len(fields) != 2):
+            to_send = "ERR___R|001|" + " not enogh fields"
+            return to_send
+        to_send = db.get_book_by_author_name(fields[0],fields[1])
+
+    elif action == "GBBGEN":
+        if(len(fields) != 1):
+            to_send = "ERR___R|001|" + " not enogh fields"
+            return to_send
+        to_send = db.get_book_by_genre(fields[0])
+
+    elif action == "GBBPRI":
+        if(len(fields) != 2):
+            to_send = "ERR___R|001|" + " not enogh fields"
+            return to_send
+        to_send = db.get_book_by_price(fields[0],fields[1])
+
+    elif action == "GBBNAM":
+        if(len(fields) != 1):
+            to_send = "ERR___R|001|" + " not enogh fields"
+            return to_send
+        to_send = db.get_book_by_name(fields[0])
+
+    elif action == "GANATI":
+        if(len(fields) != 1):
+            to_send = "ERR___R|001|" + " not enogh fields"
+            return to_send
+        to_send = db.get_authors_by_nationality(fields[0])
 
     elif action == "RULIVE":
         to_send = "RULIVER|"+ "yes i am a live server"
