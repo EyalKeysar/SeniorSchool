@@ -1,0 +1,9 @@
+1 - First lets add Author Fname 'A' Lname 'A'
+2 - add Author Fname 'A' Lname 'B'
+3 - add Book name = C genre = C price = C author id = 1
+4 - Lets Inject, choose Get Books by Authors name:
+
+Enter Author first name > A' OR '1'='1
+Enter Author last name > S
+
+We do not have any Author that has S last name but we got the Book anyway because we inject and so we got all books of Authors with A first name.

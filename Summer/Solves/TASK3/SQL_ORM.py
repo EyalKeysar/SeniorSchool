@@ -8,6 +8,9 @@ import pickle
 __author__ = 'Eyal Keysar'
 
 
+# List of strings in Queries that have potential to be SQL injection
+SQL_INJECTION_POSSIBLE = ['--']
+
 
 class Author(object):
     def __init__(self, author_first_name, author_last_name, nationality):
@@ -39,7 +42,7 @@ class Book(object):
         self.author_id = author_id
 
     def __str__(self):
-        return "Book:" + str(self.book_id) + ":" + self.book_name + ":" + self.genre + ":" + str(self.price) + ":" + str(self.author_id)
+        return "Book: id:" + str(self.book_id) + ": name:" + self.book_name + ": genre:" + self.genre + ": price:" + str(self.price) + ": author id:" + str(self.author_id)
 
     
 class BookAuthorORM():
@@ -113,11 +116,17 @@ class BookAuthorORM():
         for line in res:
             cur_book = Book(line[1],line[2],line[3], line[4])
             cur_book.book_id = line[0]
-            books.append(cur_book)
+            books.append(str(cur_book))
         self.close_DB()
         return books
 
     def get_book_by_author_id(self, author_id):
+
+        for x in SQL_INJECTION_POSSIBLE:
+            if(x in author_id):
+                print("SQL INJECTION POSSIBLE")
+                return ["SQL INJECTION DETECTED"]
+        
         self.open_DB()
         books = []
         sql = "SELECT * FROM Books WHERE Authorid = " + str(author_id)
@@ -126,24 +135,33 @@ class BookAuthorORM():
         for line in res:
             cur_book = Book(line[1],line[2],line[3], line[4])
             cur_book.book_id = line[0]
-            books.append(cur_book)
+            books.append(str(cur_book))
         self.close_DB()
         return books
     
     def get_book_by_author_name(self, author_fname, author_lname):
+        for x in SQL_INJECTION_POSSIBLE:
+            if(x in author_fname or x in author_lname):
+                print("SQL INJECTION POSSIBLE")
+                return ["SQL INJECTION DETECTED"]
         self.open_DB()
         books = []
+        
         sql = "SELECT * FROM Books WHERE Authorid IN (SELECT Authorid FROM Authors WHERE Fname = '" + author_fname + "' AND Lname = '" + author_lname + "')"
         self.current.execute(sql)
         res = self.current.fetchall()
         for line in res:
             cur_book = Book(line[1],line[2],line[3], line[4])
             cur_book.book_id = line[0]
-            books.append(cur_book)
+            books.append(str(cur_book))
         self.close_DB()
         return books
     
     def get_book_by_genre(self, genre):
+        for x in SQL_INJECTION_POSSIBLE:
+            if(x in genre):
+                print("SQL INJECTION POSSIBLE")
+                return ["SQL INJECTION DETECTED"]
         self.open_DB()
         books = []
         sql = "SELECT * FROM Books WHERE Genre = '" + genre + "'"
@@ -152,24 +170,33 @@ class BookAuthorORM():
         for line in res:
             cur_book = Book(line[1],line[2],line[3], line[4])
             cur_book.book_id = line[0]
-            books.append(cur_book)
+            books.append(str(cur_book))
         self.close_DB()
         return books
     
     def get_book_by_price(self, min_price, max_price):
+        for x in SQL_INJECTION_POSSIBLE:
+            if(x in min_price or x in max_price):
+                print("SQL INJECTION POSSIBLE")
+                return ["SQL INJECTION DETECTED"]
         self.open_DB()
         books = []
-        sql = "SELECT * FROM Books WHERE Price >= " + min_price + " AND Price <= " + max_price
+        sql = "SELECT * FROM Books"
         self.current.execute(sql)
         res = self.current.fetchall()
         for line in res:
             cur_book = Book(line[1],line[2],line[3], line[4])
             cur_book.book_id = line[0]
-            books.append(cur_book)
+            if(float(cur_book.price) >= float(min_price) and float(cur_book.price) <= float(max_price)):
+                books.append(str(cur_book))
         self.close_DB()
         return books
     
     def get_book_by_name(self, book_name):
+        for x in SQL_INJECTION_POSSIBLE:
+            if(x in book_name):
+                print("SQL INJECTION POSSIBLE")
+                return ["SQL INJECTION DETECTED"]
         self.open_DB()
         books = []
         sql = "SELECT * FROM Books WHERE Bookname = '" + book_name + "'"
@@ -178,11 +205,15 @@ class BookAuthorORM():
         for line in res:
             cur_book = Book(line[1],line[2],line[3], line[4])
             cur_book.book_id = line[0]
-            books.append(cur_book)
+            books.append(str(cur_book))
         self.close_DB()
         return books
     
     def get_authors_by_nationality(self, nationality):
+        for x in SQL_INJECTION_POSSIBLE:
+            if(x in nationality):
+                print("SQL INJECTION POSSIBLE")
+                return ["SQL INJECTION DETECTED"]
         self.open_DB()
         authors = []
         sql = "SELECT * FROM Authors WHERE Nationality = '" + nationality + "'"
