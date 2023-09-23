@@ -1,9 +1,9 @@
 import socket
-
-from ..shared.NetConst import *
-from db_handler import DBHandler
-
 import threading
+
+from shared.NetConst import *
+from server.db_handler import DBHandler
+
 
 HOST = '0.0.0.0'
 
@@ -63,3 +63,7 @@ class Server:
             self.clients[self.usernames.index(username)].send(REGISTER_SUCCESS)
         else:
             self.clients[self.usernames.index(username)].send(REGISTER_FAIL)
+            
+if(__name__ == "__main__"):
+    server = Server()
+    server.run()

@@ -1,6 +1,6 @@
 import tkinter as tk
 
-from .window_const import *
+from client.GUI.window.window_const import *
 
 class LoginWindow(tk.Toplevel):
     def __init__(self, parent, serverAPI):

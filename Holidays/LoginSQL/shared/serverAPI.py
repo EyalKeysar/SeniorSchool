@@ -1,4 +1,4 @@
-from .NetConst import *
+from shared.NetConst import *
 import socket
 
 class ServerAPI():
@@ -6,8 +6,9 @@ class ServerAPI():
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.sock.connect((HOST, PORT))
         
+        
     def login(self, username, password):
-        self.sock.send(LOGIN_REQ + username + ";" + password)
+        self.sock.send((LOGIN_REQ + username + ";" + password).encode())
         response = self.sock.recv(1024).decode()
         
         if(response == LOGIN_SUCCESS):
@@ -16,7 +17,7 @@ class ServerAPI():
             return False
         
     def register(self, username, password):
-        self.sock.send(REGISTER_REQ + username + ";" + password)
+        self.sock.send((REGISTER_REQ + username + ";" + password).encode())
         response = self.sock.recv(1024).decode()
         
         if(response == REGISTER_SUCCESS):

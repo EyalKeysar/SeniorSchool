@@ -1,7 +1,7 @@
 import tkinter as tk
-from .window_const import *
-from .login_win import LoginWindow
-from .register_win import RegisterWindow
+from client.GUI.window.window_const import *
+from client.GUI.window.login_win import LoginWindow
+from client.GUI.window.register_win import RegisterWindow
 
 class MainWindow(tk.Toplevel):
 

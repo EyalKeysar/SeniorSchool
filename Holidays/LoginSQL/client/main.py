@@ -1,7 +1,7 @@
 import tkinter as tk
-from GUI.WindowHandler import WindowHandler
-from GUI.window.main_win import MainWindow
-from ..shared.serverAPI import ServerAPI
+from client.GUI.WindowHandler import WindowHandler
+from client.GUI.window.main_win import MainWindow
+from shared.serverAPI import ServerAPI
 
 
 def main():
