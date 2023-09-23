@@ -17,6 +17,7 @@ class Server:
         self.db = DBHandler()
         
         self.clients = []
+        self.authenticated_clients = []
         self.usernames = []
         
         self.protocol_dict = {
@@ -35,35 +36,37 @@ class Server:
             
     def handle_client(self, conn):
         while True:
-            data = conn.recv(1024).data.decode()
+            data = conn.recv(1024).decode()
             if not data:
                 break
             
             command = data[:6]
             
-            if(self.dict[data[:6]] == None):
+            if(self.protocol_dict[data[:6]] == None):
                 print("Invalid command: " + data[:6])
             else:
-                self.protocol_dict[command](data)
+                self.protocol_dict[command](conn, data)
         
-    def login(self, data):
+    def login(self, conn, data):
         username, password = data[6:].split(";")
         
         if(self.db.login(username, password)):
-            self.clients[self.usernames.index(username)].send(LOGIN_SUCCESS)
+            conn.send(LOGIN_SUCCESS.encode())
+            if(conn not in self.authenticated_clients):
+                self.authenticated_clients.append(conn)
         else:
-            self.clients[self.usernames.index(username)].send(LOGIN_FAIL)
-        
+            conn.send(LOGIN_FAIL.encode())
         
     
-    def register(self, data):
+    def register(self, conn, data):
         username, password = data[6:].split(";")
         
         if(self.db.register(username, password)):
-            self.clients[self.usernames.index(username)].send(REGISTER_SUCCESS)
+            conn.send(REGISTER_SUCCESS.encode())
+            if(conn not in self.authenticated_clients):
+                self.authenticated_clients.append(conn)
         else:
-            self.clients[self.usernames.index(username)].send(REGISTER_FAIL)
-            
+            conn.send(REGISTER_FAIL.encode())
 if(__name__ == "__main__"):
     server = Server()
     server.run()
