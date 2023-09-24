@@ -2,6 +2,7 @@ import tkinter as tk
 from client.GUI.window.window_const import *
 from client.GUI.window.login_win import LoginWindow
 from client.GUI.window.register_win import RegisterWindow
+from client.GUI.window.suc_win import SucWindow
 
 class MainWindow(tk.Toplevel):
 
@@ -29,7 +30,7 @@ class MainWindow(tk.Toplevel):
         self.register_button.pack()
 
     def login_command(self):
-        self.window_handler.PushWindow(LoginWindow, self.serverAPI)
+        self.window_handler.PushWindow(LoginWindow, self.serverAPI, self.window_handler)
         
     def register_command(self):
-        self.window_handler.PushWindow(RegisterWindow, self.serverAPI)
+        self.window_handler.PushWindow(RegisterWindow, self.serverAPI, self.window_handler)

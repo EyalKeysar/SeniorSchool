@@ -4,12 +4,14 @@ import tkinter.messagebox
 from typing import Any
 
 from client.GUI.window.window_const import *
+from client.GUI.window.suc_win import SucWindow
 
 class RegisterWindow(tk.Toplevel):
-    def __init__(self, parent, serverAPI):
+    def __init__(self, parent, serverAPI, window_handler):
         super().__init__(parent)
         
         self.serverAPI = serverAPI
+        self.window_handler = window_handler
 
         self.geometry(f"{REGISTER_WINDOW_WIDTH}x{REGISTER_WINDOW_HEIGHT}")
         self.title("Register")
@@ -46,6 +48,7 @@ class RegisterWindow(tk.Toplevel):
         res = self.serverAPI.register(username, password)
         if(res):
             tk.messagebox.showinfo("Success", "Register successful")
+            self.window_handler.ChangeWindow(SucWindow, self.serverAPI)
         else:
             tk.messagebox.showerror("Error", "Register failed")
         

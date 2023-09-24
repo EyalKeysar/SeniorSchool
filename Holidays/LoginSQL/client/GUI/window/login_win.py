@@ -1,12 +1,14 @@
 import tkinter as tk
 
 from client.GUI.window.window_const import *
+from client.GUI.window.suc_win import SucWindow
 
 class LoginWindow(tk.Toplevel):
-    def __init__(self, parent, serverAPI):
+    def __init__(self, parent, serverAPI, window_handler):
         super().__init__(parent)
         
         self.serverAPI = serverAPI
+        self.window_handler = window_handler
         
         self.geometry(f"{LOGIN_WINDOW_WIDTH}x{LOGIN_WINDOW_HEIGHT}")
         self.title("Login")
@@ -37,6 +39,7 @@ class LoginWindow(tk.Toplevel):
         res = self.serverAPI.login(self.username, self.password)
         if(res):
             tk.messagebox.showinfo("Success", "Login successful")
+            self.window_handler.ChangeWindow(SucWindow, self.serverAPI)
         else:
             tk.messagebox.showerror("Error", "Login failed")
 
