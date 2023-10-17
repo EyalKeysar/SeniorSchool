@@ -4,9 +4,12 @@ from .commands import commands_list
 
 class HelpCommand(InternalCommand):
 
+    name = "help"
+    description = "Print this help message"
 
-    def __init__(self):
-        super().__init__("help", "Print this help message")
+    def __init__(self, args, redirect=None):
+        self.args = args
+        self.redirect = redirect
 
     def execute(self, arg):
         if(arg == ""):

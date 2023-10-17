@@ -8,3 +8,6 @@ from . import echo
 from . import exit
 from . import help
 from . import set
+from . import ls
+
+from . import commands

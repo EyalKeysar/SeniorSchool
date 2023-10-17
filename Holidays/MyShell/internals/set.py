@@ -2,9 +2,15 @@ import os
 from .internal_command import InternalCommand
 
 class SetCommand(InternalCommand):
-    def __init__(self):
-        super().__init__("set", "Set environment variable, if no arguments are given, print all environment variables")
 
+    name = "set"
+    description = "Set environment variable, if no arguments are given, print all environment variables"
+
+    def __init__(self, args, redirect=None):
+        self.args = args
+        self.redirect = redirect
+
+        
     def execute(self, arg):
         if(arg.count("=") != 1):
             return "\n".join([env for env in os.environ if env.startswith(arg)])

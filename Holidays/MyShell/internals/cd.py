@@ -1,14 +1,26 @@
 import os
 
 from .internal_command import InternalCommand
-
+from .helpers import handle_stdout
 class CdCommand(InternalCommand):
-    def __init__(self):
-        super().__init__("cd", "Change directory")
 
-    def execute(self, arg):
+    name = "cd"
+    description = "Changes the current directory"
+
+    def __init__(self, args, redirect=None):
+        self.args = args
+        self.stdout = ""
+        self.redirect = redirect
+
+    def execute(self):
+        self.stdout = ""
         try:
-            os.chdir(arg.strip())
+            os.chdir(self.args[0])
         except FileNotFoundError:
-            return f"cd: {arg}: No such file or directory"
-        return ""
+            self.stdout = f"cd: {self.args[0]}: No such file or directory", True
+        except NotADirectoryError:
+            self.stdout = f"cd: {self.args[0]}: Not a directory", True
+        except PermissionError:
+            self.stdout = f"cd: {self.args[0]}: Permission denied", True
+
+        handle_stdout(self.redirect, self.stdout)

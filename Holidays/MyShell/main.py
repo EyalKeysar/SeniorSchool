@@ -20,7 +20,6 @@ def handle_input(user_input):
     tokens = tokenize(user_input)
     commands = parse(tokens)
     execute(commands)
-    print(commands)
 
 def tokenize(user_input):
     """
@@ -70,13 +69,9 @@ def execute(commands):
     Executes the commands
     """
     for command in commands:
-        if command['command'] == 'exit':
-            sys.exit()
-        else:
-            for command_class in internals.commands_list:
-                if command['command'].casefold() == command_class.name.casefold():
-                    command_class(command['arguments'], command['redirect']).execute()
-                    break
+        for command_class in internals.commands.commands_list:
+            if command['command'].casefold() == command_class.name.casefold():
+                command_class(command['arguments'], command['redirect']).execute()
 
 if __name__ == "__main__":
     main()
