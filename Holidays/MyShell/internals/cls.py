@@ -11,6 +11,6 @@ class ClsCommand(InternalCommand):
         self.args = args
         self.redirect = redirect
     
-    def execute(self, arg):
+    def execute(self):
         os.system("cls")
         return ""

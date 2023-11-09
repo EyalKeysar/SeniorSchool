@@ -3,6 +3,7 @@ import sys
 import socket
 import art
 import internals
+import subprocess
 
 def main():
     print("Welcome to Keysar Shell!\n" + art.text2art("KEYSAR\nSHELL"))
@@ -68,10 +69,52 @@ def execute(commands):
     """
     Executes the commands
     """
+
+    piped_arguments = []
+
+    i = -1
     for command in commands:
+        i += 1
+
+        if(command['command'].casefold() == "help"):
+            internals.help.HelpCommand(command['arguments'], command['redirect']).execute()
+            continue
+
         for command_class in internals.commands.commands_list:
             if command['command'].casefold() == command_class.name.casefold():
-                command_class(command['arguments'], command['redirect']).execute()
+                try:
+                    command_class(command['arguments'], command['redirect']).execute()
+                    return
+                except Exception as e:
+                    print("execute error" + str(e))
+                    return
+                
+        # execute external commands
+        paths = os.environ["PATH"].split(os.pathsep)
+        for path in paths:
+            try:
+                files = os.listdir(path)
+                for file in files:
+                    base_name, extension = os.path.splitext(file)
+                    if base_name == command['command'] and os.access(os.path.join(path, file), os.X_OK):
+                        executable_path = os.path.join(path, file)
+
+                        # use popen to execute the command
+                        if command['redirect'] is not None:
+                            with open(command['redirect'], 'w') as f:
+                                subprocess.Popen([executable_path] + command['arguments'], stdout=f)
+                        else:
+                            subprocess.Popen([executable_path] + command['arguments'])
+
+                        return
+            except OSError as e:
+                print("execute error" + str(e))
+                continue
+
+    print("Command not found.")
+    
+
+        
 
 if __name__ == "__main__":
     main()

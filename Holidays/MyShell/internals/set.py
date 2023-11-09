@@ -10,8 +10,8 @@ class SetCommand(InternalCommand):
         self.args = args
         self.redirect = redirect
 
-        
-    def execute(self, arg):
+
+    def execute(self):
         if(arg.count("=") != 1):
             return "\n".join([env for env in os.environ if env.startswith(arg)])
         env_name, env_value = arg.split("=")

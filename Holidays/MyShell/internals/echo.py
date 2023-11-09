@@ -1,5 +1,6 @@
 
 from .internal_command import InternalCommand
+from .helpers import handle_stdout
 
 class EchoCommand(InternalCommand):
 
@@ -10,5 +11,7 @@ class EchoCommand(InternalCommand):
         self.args = args
         self.redirect = redirect
     
-    def execute(self, arg):
-        return str(arg)
+    def execute(self):
+
+        stdout_printable = " ".join(self.args)
+        handle_stdout(self.redirect, stdout_printable)

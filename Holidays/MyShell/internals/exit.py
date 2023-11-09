@@ -11,5 +11,5 @@ class ExitCommand(InternalCommand):
         self.redirect = redirect
 
 
-    def execute(self, arg):
+    def execute(self):
         sys.exit(0)
