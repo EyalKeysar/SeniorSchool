@@ -1,11 +1,13 @@
 import socket
 import threading
+from hashlib import sha256, md5
 
 from shared.NetConst import *
 from server.db_handler import DBHandler
 
 
 HOST = '0.0.0.0'
+HASH_PEPPER = "50m3 p3pp3r"
 
 class Server:
     def __init__(self):
@@ -46,7 +48,8 @@ class Server:
                 print("Invalid command: " + data[:6])
             else:
                 self.protocol_dict[command](conn, data)
-        
+            self.db.printall()
+
     def login(self, conn, data):
         username, password = data[6:].split(";")
         
