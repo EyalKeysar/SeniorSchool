@@ -20,6 +20,7 @@ def main_loop():
 def handle_input(user_input):
     tokens = tokenize(user_input)
     commands = parse(tokens)
+    print(commands)
     execute(commands)
 
 def tokenize(user_input):
@@ -102,10 +103,17 @@ def execute(commands):
                         # use popen to execute the command
                         if command['redirect'] is not None:
                             with open(command['redirect'], 'w') as f:
-                                subprocess.Popen([executable_path] + command['arguments'], stdout=f)
+                                print("redirecting to " + command['redirect'])
+                                subprocess.Popen([executable_path] + command['arguments'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+                                proc.wait()
+                                print(proc.returncode)
+                                print()
                         else:
-                            subprocess.Popen([executable_path] + command['arguments'])
-
+                            print("not redirecting")
+                            proc = subprocess.Popen([executable_path] + command['arguments'], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+                            proc.wait()
+                            with command['redirect'] as f:
+                                f.write(proc.stdout)
                         return
             except OSError as e:
                 print("execute error" + str(e))
