@@ -1,5 +1,6 @@
 from shared.NetConst import *
 import socket
+from shared.core_proto import *
 
 class ServerAPI():
     def __init__(self):
@@ -8,7 +9,7 @@ class ServerAPI():
         
         
     def login(self, username, password):
-        self.sock.send((LOGIN_REQ + username + ";" + password).encode())
+        send_by_size(self.sock, (LOGIN_REQ + username + ";" + password))
         response = self.sock.recv(1024).decode()
         
         if(response == LOGIN_SUCCESS):
@@ -17,7 +18,7 @@ class ServerAPI():
             return False
         
     def register(self, username, password):
-        self.sock.send((REGISTER_REQ + username + ";" + password).encode())
+        send_by_size(self.sock, (REGISTER_REQ + username + ";" + password))
         response = self.sock.recv(1024).decode()
         
         if(response == REGISTER_SUCCESS):

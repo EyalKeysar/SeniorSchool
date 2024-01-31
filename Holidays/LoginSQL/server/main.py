@@ -3,6 +3,7 @@ import threading
 from hashlib import sha256, md5
 
 from shared.NetConst import *
+from shared.core_proto import *
 from server.db_handler import DBHandler
 
 
@@ -38,7 +39,7 @@ class Server:
             
     def handle_client(self, conn):
         while True:
-            data = conn.recv(1024).decode()
+            data = recv_by_size(conn)
             if not data:
                 break
             
